@@ -1,0 +1,114 @@
+---
+title: "Multi-donor Frog Reintroduction Project"
+author: "Roland Knapp"
+date: today
+date-format: long
+format: pdf
+editor: visual
+bibliography: multidonor.bib
+csl: ecology.csl
+execute: 
+  echo: false
+---
+
+```{r}
+#| warning: false
+
+if (!require(librarian)){
+install.packages("librarian")
+library(librarian)
+}
+librarian::shelf(rmarkdown, knitr, here, readr)
+```
+
+### Background
+
+This study was originally developed by Roland and Bree in 2018 and funded by the National Park Service (Cooperative Agreement P18AC01415; UCSB: \$71,602, UCB: \$25,000).
+The objective of the study was to reestablish *Rana sierrae* at several sites in Yosemite and Kings Canyon National Parks from which they were extirpated, and do so using multiple donor populations instead of the usual single donor population.
+The use of multiple donor populations was motivated by the fact that in some situations the available donor populations were relatively small and individually could support the removal of only few frogs.
+The alternative to using a single donor population was to collect small numbers of frogs from multiple populations.
+Such a multi-donor reintroduction had never been conducted with mountain yellow-legged frogs (*Rana muscosa*, *R. sierrae*) and provided an opportunity to use genomic methods to (1) compare the contribution of each donor population to post-reintroduction recruitment into the adult population, and (2) describe selection in the recruited cohorts resulting from the mixing of genomes from the donor populations.
+
+### Study design
+
+The original study design was to translocate adult *R. sierrae* into two lakes in Yosemite and two lakes in Kings Canyon.
+Based on the availability of suitable donor populations, frogs for the Yosemite and Kings Canyon translocations would be collected from two and three donor populations, respectively.
+We planned to assess survival of translocated adults, reproduction, and recruitment of new adults (i.e., progeny of translocated individuals) using visual encounter surveys (VES) and capture-mark-recapture (CMR) surveys.
+To provide samples for genomic analyses, toe tips would be collected from the translocated individuals and from subadults and adults produced at the recipient sites.
+Unfortunately, in 2018 when this study got underway, the number of adults in the donor populations was smaller than expected and precluded any collection of adults.
+Therefore, we collected tadpoles from the donor populations which were then raised to adulthood at the San Francisco and Oakland Zoos before being reintroduced into the recipient sites.
+This use of reintroductions instead of translocations delayed the availability of subadults and adults at the recipient sites for tissue sampling by several years.
+
+The donor populations were all characterized by high prevalence and moderate load of *Batrachochytrium dendrobatidis* (Bd), as is typical for enzootic *R. sierrae* populations [@knapp2011].
+All contained *R. sierrae* populations that were in various stages of recovering from presumed or known Bd-caused declines that occurred in recent decades.
+In Yosemite, the recipient sites are two lakes in a basin in the Merced River watershed, but bordering the Tuolumne River watershed.
+*R. sierrae* populations were present in this basin historically (until the early 2000s) and their extirpation is assumed to be the result of Bd outbreaks.
+When the current study was initiated, no extant *R. sierrae* populations remained in the basin or in the immediate vicinity.
+The two donor populations are in two lakes in a basin located in the Merced River headwaters (site id = 70284, 70567; separated by only 100 m) and a pond in the Tuolumne River headwaters (70397).
+We collected *R. sierrae* tadpoles from the donor populations in 2018 and 2019.
+Tadpoles were raised to adulthood in the zoos and reintroduced to the two recipient lakes (70470, 70481) in 2019, 2020, and 2021 (@tbl-relocate-sum; @tbl-relocate-details).
+For details on the genetic structure of *R. sierrae* populations in Yosemite, see @poorten2017.
+
+In Kings Canyon, the recipient sites are two lakes in a basin located in the Middle Fork Kings River watershed (10223, 10225).
+*R. sierrae* populations were extirpated from these sites in the mid-2000s following a well-documented Bd epizootic [@vredenburg2010].
+The three donor populations are located in two lakes in the Middle Fork Kings River watershed (10206, 10593) and one lake in the South Fork San Joaquin River watershed (10055).
+The 10206 donor population is located in the same basin as the recipient sites and also experienced the Bd-caused epizootic described above.
+However, unlike most populations in the basin, the 10206 population was not extirpated by the epizootic.
+To date, this population has persisted for more than 15 years post-epizootic, but has not yet shown much evidence of recovery (i.e, few adults present).
+We collected *R. sierrae* tadpoles from the donor populations in 2018 and 2019.
+These animals were raised to adulthood in the zoos and reintroduced to the recipient sites in 2020 and 2021 (@tbl-relocate-sum; @tbl-relocate-details).
+Genetic structure of *R. sierrae* populations in Kings Canyon is described in @rothstein2020.
+
+Following the reintroductions, we assessed the *R. sierrae* populations at all four recipient sites one or more times per summer using CMR surveys and VES.
+The VES counts provide information on the relative abundance of tadpoles and subadults, and the frog capture histories produced by CMR surveys allow estimation of adult survival, population size, and recruitment of new adults (i.e., progeny of reintroduced frogs).
+
+### Results
+
+Following frog reintroduction into the study lakes (see @tbl-relocate-details for release years), introduced adults were observed in all CMR surveys conducted through 2022 (@fig-survey-counts A).
+Tadpoles were observed during VES conducted during the 2-3 year post-reintroduction period (@fig-survey-counts B), and the first subadults were observed during VES conducted in 2022 (@fig-survey-counts C).
+Notably, the number of all *R. sierrae* life stages counted in the two Yosemite sites is considerably lower than the number counted in the two Kings Canyon sites, likely due to differences in detectability and/or survival.
+
+Tissue samples (toe-tips) from the first cohort of subadults were collected from three of the four recipient sites in 2022 (number of samples: 10223 = 20; 10225 = 19; 70481 = 16).
+We will attempt to collect samples from subadults in 70470 in 2023, depending on the availability of that life stage.
+Samples from newly-recruited adults will be collected from populations in all four recipient sites whenever new recruits are captured during CMR surveys.
+In addition, we also have tissue samples (buccal or toe-tip) from four of the five donor populations, and toe-tips from the one unsampled population (70284 / 70567) will be collected in 2023.
+
+In 2020, we added two additional multi-donor recipient sites to this study, both located in the South Fork San Joaquin River watershed (Kings Canyon: 10109, 10114).
+*R. sierrae* tadpoles were collected in 2020 from two donor populations (10037, 10055) located in the South Fork San Joaquin watershed, and raised to adulthood in the zoo.
+Adults were reintroduced into the two recipient sites in 2021 and 2022, and a final cohort will be reintroduced in 2023.
+Post-reintroduction results and other details will be added to this summary as they become available.
+
+### References
+
+::: {#refs}
+:::
+
+\newpage
+
+### Tables
+
+```{r}
+#| label: tbl-relocate-sum
+#| tbl-cap: "Total number of zoo-reared adult *R. sierrae* released into each of the four recipient sites. Note that collect_siteid = 70567 includes frogs collected from the adjacent 70284. The missing information for 10223 will be added when it is obtained from the responsible zoo."
+#| warning: false
+
+relocate_sum_tbl <- read_csv(here("data", "clean", "relocate_sum_tbl.csv"))
+knitr::kable(relocate_sum_tbl, align = "c")
+```
+
+\newpage
+
+```{r}
+#| label: tbl-relocate-details
+#| tbl-cap: "Description of collection and release locations for all cohorts of zoo-reared *R. sierrae* reintroduced into each of the four recipient sites. Note that collect_siteid = 70284 and 70567  are immediately adjacent and constitute a single donor population. The missing information for 10223 will be added when it is obtained from the responsible zoo."
+#| warning: false
+
+relocate_details_tbl <- read_csv(here("data", "clean", "relocate_details_tbl.csv"))
+knitr::kable(relocate_details_tbl, align = "c")
+```
+
+\newpage
+
+### Figures
+
+![For the reintroduced frog populations, (A) number of adults captured during CMR surveys, (B) number of tadpoles counted during VES, and (C) number of subadults counted during VES.](out/survey_counts.png){#fig-survey-counts width="4in"}
