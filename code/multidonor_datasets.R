@@ -62,7 +62,7 @@ relocate_frog_csv <- relocate_frog_csv %>%
 relocate_frog <- bind_rows(relocate_frog_pg, relocate_frog_csv) %>% 
   inner_join(join_id, by = c("relocate_id" = "id"))
 
-relocate <- relocate_frog %>% 
+relocate1 <- relocate_frog %>% 
   count(relocate_id) %>% 
   inner_join(relocate, by = c("relocate_id" = "id")) %>% 
   mutate(n_release = n, 
@@ -72,9 +72,9 @@ relocate <- relocate_frog %>%
          site_id = release_siteid1) %>% 
     select(site_id, collect_siteid, collect_year, zoo, release_year, n_release) %>% 
   arrange(site_id, collect_siteid, release_year)
-write_csv(relocate, here("data", "clean", "relocate_details_tbl.csv"))
+write_csv(relocate1, here("data", "clean", "relocate_details_tbl.csv"))
 
-relocate_sum <- relocate %>% 
+relocate_sum <- relocate1 %>% 
   mutate(collect_siteid = replace(collect_siteid, collect_siteid == 70284, 70567)) %>% # combine 2 adjacent sites
   group_by(site_id, collect_siteid) %>% 
   summarize(release_total = sum(n_release)) %>% 
@@ -84,7 +84,7 @@ relocate_sum <- relocate %>%
   relocate(jurisdiction, .before = site_id)
 write_csv(relocate_sum, here("data", "clean", "relocate_sum_tbl.csv"))
 
-# Create datasets for figures
+# Create datasets for frog count figure
 ves_counts2 <- ves_counts1 %>% 
   mutate(site_id = replace(site_id, site_id == 72773, 70470), # combine adjacent sites
          site_id = replace(site_id, site_id == 72695, 70481)) %>% 
@@ -115,4 +115,38 @@ cmr_counts <- cmr_captures2 %>%
   relocate(date_min, .before = period)
 write_csv(cmr_counts, here("data", "clean", "cmr_counts.csv"))
 
+# Create datasets for bar chart
+relocate_source_prop <- relocate_sum %>% 
+  group_by(site_id) %>% 
+  summarize(release_total_site = sum(release_total)) %>% 
+  inner_join(relocate_sum, by = "site_id") %>% 
+  relocate(release_total_site, .after = release_total) %>% 
+  mutate(
+    group = "released", 
+    proportion = release_total / release_total_site) %>% 
+  select(site_id, collect_siteid, group, proportion)
 
+capture_pittags <- cmr_captures2 %>% 
+  distinct(site_id, pit_tag_ref) # Produces one more than when using `distinct(pit_tag_ref)`. Need to find out why. 
+
+capture_source_prop <- relocate %>% 
+  inner_join(relocate_frog, by = c("id" = "relocate_id")) %>% 
+  select(release_siteid1, collect_siteid, pit_tag_ref) %>% 
+  inner_join(capture_pittags, by = "pit_tag_ref") %>% 
+  select(site_id, collect_siteid, pit_tag_ref) %>% 
+  mutate(collect_siteid = replace(collect_siteid, collect_siteid == 70284, 70567)) %>% 
+  count(site_id, collect_siteid) %>% 
+  group_by(site_id) %>% 
+  summarize(capture_total_site = sum(n)) %>% 
+  inner_join(capture_source, by = "site_id") %>% 
+  relocate(capture_total_site, .after = n) %>% 
+  mutate(
+    group = "captured",
+    proportion = n / capture_total_site) %>% 
+  select(site_id, collect_siteid, group, proportion)
+relocate_capture_prop <- bind_rows(relocate_source_prop, capture_source_prop)
+write_csv(relocate_capture_prop, here("data", "clean", "relocate_capture_prop.csv"))
+
+
+
+  

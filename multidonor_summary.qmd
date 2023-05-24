@@ -68,6 +68,13 @@ Following frog reintroduction into the study lakes (see @tbl-relocate-details fo
 Tadpoles were observed during VES conducted during the 2-3 year post-reintroduction period (@fig-survey-counts B), and the first subadults were observed during VES conducted in 2022 (@fig-survey-counts C).
 Notably, the number of all *R. sierrae* life stages counted in the two Yosemite sites is considerably lower than the number counted in the two Kings Canyon sites, likely due to differences in detectability and/or survival.
 
+To provide a preliminary assessment of the survival of frogs from each of the donor populations, for the total number of frogs released into the study lakes and subsequently recaptured during CMR surveys, we compared the proportion of frogs that originated in each of the donor sites.
+Although the proportion released versus captured was generally similar between the donor sites (@fig-relocatecapture), there were some small but notable differences.
+In 10223 and 10225, frogs from 10055 and 10206 were underrepresented in captures compared to releases.
+In contrast, frogs from 10593 were overrepresented in captures.
+This suggests that survival of frogs from 10593 was higher than that of frogs from 10055 and 10206.
+In 70470, frogs from 70567 appeared to have higher survival than frogs from 70397, but in 70481 frog survival from both donor populations was similar.
+
 Tissue samples (toe-tips) from the first cohort of subadults were collected from three of the four recipient sites in 2022 (number of samples: 10223 = 20; 10225 = 19; 70481 = 16).
 We will attempt to collect samples from subadults in 70470 in 2023, depending on the availability of that life stage.
 Samples from newly-recruited adults will be collected from populations in all four recipient sites whenever new recruits are captured during CMR surveys.
@@ -78,12 +85,12 @@ In 2020, we added two additional multi-donor recipient sites to this study, both
 Adults were reintroduced into the two recipient sites in 2021 and 2022, and a final cohort will be reintroduced in 2023.
 Post-reintroduction results and other details will be added to this summary as they become available.
 
+<!--# Consider adding a figure showing Bd loads of frogs in the different donor/recipient populations.  -->
+
 ### References
 
 ::: {#refs}
 :::
-
-\newpage
 
 ### Tables
 
@@ -112,3 +119,5 @@ knitr::kable(relocate_details_tbl, align = "c")
 ### Figures
 
 ![For the reintroduced frog populations, (A) number of adults captured during CMR surveys, (B) number of tadpoles counted during VES, and (C) number of subadults counted during VES.](out/survey_counts.png){#fig-survey-counts width="4in"}
+
+![For frogs reintroduced into each of the study lakes, the proportion from each of the donor populations that were reintroducted ("released") versus captured during subsequent CMR surveys.](out/stackbar_relocatecapture.png){#fig-relocatecapture}
