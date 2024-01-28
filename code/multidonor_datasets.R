@@ -129,7 +129,15 @@ relocate_source_prop <- relocate_sum %>%
 capture_pittags <- cmr_captures2 %>% 
   distinct(site_id, pit_tag_ref) # Produces one more than when using `distinct(pit_tag_ref)`. Need to find out why. 
 
-capture_source_prop <- relocate %>% 
+capture_sites_sources <- relocate %>% 
+  inner_join(relocate_frog, by = c("id" = "relocate_id")) %>% 
+  select(release_siteid1, collect_siteid, pit_tag_ref) %>% 
+  inner_join(capture_pittags, by = "pit_tag_ref") %>% 
+  select(site_id, collect_siteid, pit_tag_ref) %>% 
+  mutate(collect_siteid = replace(collect_siteid, collect_siteid == 70284, 70567)) %>% 
+  count(site_id, collect_siteid) 
+capture_sites_totals <-
+  relocate %>% 
   inner_join(relocate_frog, by = c("id" = "relocate_id")) %>% 
   select(release_siteid1, collect_siteid, pit_tag_ref) %>% 
   inner_join(capture_pittags, by = "pit_tag_ref") %>% 
@@ -138,13 +146,13 @@ capture_source_prop <- relocate %>%
   count(site_id, collect_siteid) %>% 
   group_by(site_id) %>% 
   summarize(capture_total_site = sum(n)) %>% 
-  inner_join(capture_source, by = "site_id") %>% 
-  relocate(capture_total_site, .after = n) %>% 
+  left_join(capture_sites_sources, by="site_id") %>% 
   mutate(
     group = "captured",
     proportion = n / capture_total_site) %>% 
   select(site_id, collect_siteid, group, proportion)
-relocate_capture_prop <- bind_rows(relocate_source_prop, capture_source_prop)
+
+relocate_capture_prop <- bind_rows(relocate_source_prop, capture_sites_totals)
 write_csv(relocate_capture_prop, here("data", "clean", "relocate_capture_prop.csv"))
 
 

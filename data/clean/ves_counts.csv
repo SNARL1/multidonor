@@ -14,6 +14,9 @@ site_id,visit_date,visual_life_stage,total_count
 10223,2022-08-27,adult,14
 10223,2022-08-27,subadult,147
 10223,2022-08-27,tadpole,394
+10223,2023-08-29,adult,3
+10223,2023-08-29,subadult,6
+10223,2023-08-29,tadpole,155
 10225,2020-08-16,adult,14
 10225,2020-08-16,subadult,0
 10225,2020-08-16,tadpole,0
@@ -29,6 +32,9 @@ site_id,visit_date,visual_life_stage,total_count
 10225,2022-08-27,adult,13
 10225,2022-08-27,subadult,72
 10225,2022-08-27,tadpole,1615
+10225,2023-08-30,adult,5
+10225,2023-08-30,subadult,4
+10225,2023-08-30,tadpole,1075
 70470,2019-08-17,adult,1
 70470,2019-08-17,subadult,0
 70470,2019-08-17,tadpole,0
@@ -41,6 +47,9 @@ site_id,visit_date,visual_life_stage,total_count
 70470,2022-08-19,adult,0
 70470,2022-08-19,subadult,3
 70470,2022-08-19,tadpole,0
+70470,2023-09-20,adult,0
+70470,2023-09-20,subadult,1
+70470,2023-09-20,tadpole,0
 70481,2019-08-17,adult,2
 70481,2019-08-17,subadult,0
 70481,2019-08-17,tadpole,0
@@ -56,3 +65,6 @@ site_id,visit_date,visual_life_stage,total_count
 70481,2022-08-18,adult,1
 70481,2022-08-18,subadult,5
 70481,2022-08-18,tadpole,0
+70481,2023-08-29,adult,0
+70481,2023-08-29,subadult,2
+70481,2023-08-29,tadpole,65
