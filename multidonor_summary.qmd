@@ -3,7 +3,9 @@ title: "Multi-donor Frog Reintroduction Project"
 author: "Roland Knapp"
 date: today
 date-format: long
-format: pdf
+format: 
+  html:
+    embed-resources: true
 editor: visual
 bibliography: multidonor.bib
 csl: ecology.csl
