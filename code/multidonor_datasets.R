@@ -11,7 +11,7 @@ relocate_frog_pg <- tbl(con, "relocate_frog") %>%
   collect()
 
 ves_counts1 <- tbl(con, "visit") %>% 
-  filter(site_id %in% c(10223, 10225, 70470, 70481, 72695, 72773) & visit_date > "2018-01-01") %>% 
+  filter(site_id %in% c(10223, 10225, 70470, 70481, 72695, 72773, 10114, 10109) & visit_date > "2018-01-01") %>% 
   rename(visit_id = id,
          visit_comment = comment) %>% 
   inner_join(tbl(con, "survey"), by = "visit_id") %>% 
@@ -26,7 +26,7 @@ ves_counts1 <- tbl(con, "visit") %>%
   collect()
 
 cmr_captures1 <- tbl(con, "visit") %>% 
-  filter(site_id %in% c(10223, 10225, 70470, 70481, 72695, 72773) & visit_date > "2018-01-01") %>% 
+  filter(site_id %in% c(10223, 10225, 70470, 70481, 72695, 72773, 10114, 10109) & visit_date > "2018-01-01") %>% 
   rename(visit_id = id,
          visit_comment = comment) %>% 
   inner_join(tbl(con, "survey"), by = "visit_id") %>% 
@@ -51,7 +51,7 @@ relocate_csv <- relocate_csv %>%
          release_siteid1 = as.integer(release_siteid1),
          release_siteid2 = as.integer(release_siteid2))
 relocate <- bind_rows(relocate_pg, relocate_csv) %>% 
-  filter(release_siteid1 %in% c(70470, 70481, 10223, 10225)) %>% 
+  filter(release_siteid1 %in% c(70470, 70481, 10223, 10225, 10109, 10114)) %>% 
   mutate(collect_siteid = as.integer(collect_siteid))
 
 join_id <- relocate %>% 
@@ -155,6 +155,72 @@ capture_sites_totals <-
 relocate_capture_prop <- bind_rows(relocate_source_prop, capture_sites_totals)
 write_csv(relocate_capture_prop, here("data", "clean", "relocate_capture_prop.csv"))
 
+#Create Dataset for new recruits
+cmr_captures_for_recruitment <- 
+tbl(con, "visit") %>% 
+  filter(site_id %in% c(10223, 10225, 70470, 70481, 72695, 72773) & visit_date > "2018-01-01") %>% 
+   mutate(site_id = case_when(site_id==72773 ~ 70470,
+                              site_id==72695 ~ 70481, 
+                              .default = as.numeric(site_id))) %>% 
+  rename(visit_id = id,
+         visit_comment = comment) %>% 
+  inner_join(tbl(con, "survey"), by = "visit_id") %>% 
+  rename(survey_id = id,
+         survey_comment = comment) %>% 
+  left_join(tbl(con, "capture_survey"), by = "survey_id") %>% 
+  filter(visit_status == "suitable" & 
+           survey_type == "cmr" & 
+           (species == "ramu" | is.na(species) == TRUE) &
+           (capture_animal_state != "dead" | is.na(capture_animal_state) == TRUE)) %>% 
+  select(site_id, visit_date, pit_tag_ref, tag_new, length, comment) %>% 
+  filter(tag_new==T) %>% 
+  collect()
+write_csv(cmr_captures_for_recruitment, here("data", "clean", "cmr_captures_for_recruitment.csv"))
+  
+#Create dataset for toe-tips collected
+### NOTE on 1/28/2024 - how does amphibians db connect to RIBBiTR to see things like toe-tips?
+### cmr_captures_for_toe_clips <- data object in progress
+  
+#Create dataset for Bd loads by source population
+### long term goal: add swab values for source sites for any years sampled in 2020-2023
 
+### 1) create intermediate table of frog PIT tag and source site
+pit_tags_and_collect_sites <- tibble(relocate %>% 
+  inner_join(relocate_frog, by=c("id"="relocate_id")) %>% 
+  select(collect_siteid, pit_tag_ref)) %>% 
+  collect()
 
+### 2) join frog Bd loads by year and capture site
+### NOTE: as of 1/29/2024, qPCR for 2022 and 2023 are not appended to amphibians database.
+cmr_captures_and_Bd_loads <- 
+  tbl(con, "visit") %>% 
+  filter(site_id %in% c(10223, 10225, 70470, 70481, 72695, 72773, 10109, 10114) & visit_date > "2018-01-01") %>% 
+  mutate(site_id = case_when(site_id==72773 ~ 70470,
+                             site_id==72695 ~ 70481, 
+                             .default = as.numeric(site_id))) %>% 
+  rename(visit_id = id,
+         visit_comment = comment) %>% 
+  inner_join(tbl(con, "survey"), by = "visit_id") %>% 
+  rename(survey_id = id,
+         survey_comment = comment) %>% 
+  left_join(tbl(con, "capture_survey"), by = "survey_id") %>% 
+  filter(visit_status == "suitable" & 
+           survey_type == "cmr" & 
+           (species == "ramu" | is.na(species) == TRUE) &
+           (capture_animal_state != "dead" | is.na(capture_animal_state) == TRUE)) %>% 
+  select(visit_date, site_id, pit_tag_ref, swab_id) %>% 
+  left_join(tbl(con, "bd_load"), by=c("swab_id"="sample_id")) %>% 
+  select(visit_date, site_id, pit_tag_ref, swab_id, bd_load) %>% 
+  collect()
+### NOTE: next step, root out or average individuals with multiple swabs in one year, or something... graphic could link individuals between each swab, across all time points, or could use the primary period notation that Roland created above. 
+
+### create join of Bd loads and reintroduced frog source sites
+cmr_captures_Bdloads_frogsource <- cmr_captures_and_Bd_loads %>% 
+  left_join(pit_tags_and_collect_sites, by="pit_tag_ref")  %>% 
+  mutate(collect_siteid = case_when(collect_siteid==70284 ~ 70567,
+                            .default = as.numeric(collect_siteid)),
+         year=year(visit_date), 
+         site_id=factor(site_id),
+         collect_siteid=factor(collect_siteid))
+write_csv(cmr_captures_Bdloads_frogsource, here("data", "clean", "cmr_captures_Bd_loads_frog_source.csv"))  
   

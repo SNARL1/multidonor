@@ -39,20 +39,20 @@ p_adults / p_tads / p_subs
 ggsave(here("out", "survey_counts.png"), height = 9, width = 6.5, units = "in")
 
 # Create donor pie chart  ***REMOVE
-pie_donor_10223 <- relocate_plot %>% 
-  filter(site_id == 10223) %>% 
-  mutate(collect_siteid = as.factor(collect_siteid)) %>% 
-  ggplot(aes(x = "", y = release_prop, fill = collect_siteid)) +
-  geom_col() +
-  coord_polar(theta = "y") +
-  scale_fill_manual(values = c("yellow", "orange", "red")) +
-  geom_text(aes(label = paste0(round(release_prop * 100), "%")), position = position_stack(vjust = 0.5)) +
-  labs(x = NULL, y = NULL, fill = NULL, title = "10223") +
-  theme_classic() +
-  theme(axis.line = element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        plot.title = element_text(hjust = 0.5, vjust = -5))
+# pie_donor_10223 <- relocate_plot %>% 
+#   filter(site_id == 10223) %>% 
+#   mutate(collect_siteid = as.factor(collect_siteid)) %>% 
+#   ggplot(aes(x = "", y = release_prop, fill = collect_siteid)) +
+#   geom_col() +
+#   coord_polar(theta = "y") +
+#   scale_fill_manual(values = c("yellow", "orange", "red")) +
+#  geom_text(aes(label = paste0(round(release_prop * 100), "%")), position = position_stack(vjust = 0.5)) +
+#  labs(x = NULL, y = NULL, fill = NULL, title = "10223") +
+#  theme_classic() +
+#  theme(axis.line = element_blank(),
+#        axis.text = element_blank(),
+#        axis.ticks = element_blank(),
+#        plot.title = element_text(hjust = 0.5, vjust = -5))
 
 # Create bar chart of proportion of frogs released vs captured by collect_siteid
 relocate_capture_prop <- read_csv(here("data", "clean", "relocate_capture_prop.csv"))
@@ -74,5 +74,43 @@ stackbar_relocatecapture2 <- relocate_capture_prop %>%
   facet_wrap(~site_id) +
   labs(x = "Group", y = "Proportion of frogs", fill = "donor\npopulation") +
   theme(axis.text.x = element_text(angle = 45, hjust = 0.8, vjust = 0.7))
-stackbar_relocatecapture1 + stackbar_relocatecapture2
+stackbar_relocatecapture3 <- relocate_capture_prop %>% 
+  filter(site_id == 10109 | site_id == 10114) %>% 
+  mutate(collect_siteid = factor(collect_siteid, levels=c("10055", "10037"))) %>% 
+  ggplot(aes(x = factor(group, level = c("released", "captured")), y = proportion, fill = collect_siteid)) +
+  geom_bar(position = "stack", stat = "identity") +
+  scale_fill_viridis(discrete = TRUE, na.value = "lightgray") +
+  facet_wrap(~site_id) +
+  labs(x = "Group", y = "Proportion of frogs", fill = "donor\npopulation") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.8, vjust = 0.7))
+stackbar_relocatecapture3 + stackbar_relocatecapture1 + stackbar_relocatecapture2 
 ggsave(here("out", "stackbar_relocatecapture.png"), height = 5, width = 8, units = "in")
+
+# Create plots comparing Bd loads at CMR capture with respect to source populations
+boxplot_bd_by_source <- cmr_captures_Bdloads_frogsource %>% 
+    filter(is.na(collect_siteid)==F, 
+           is.na(pit_tag_ref)==F,
+           is.na(swab_id)==F# ,
+           #site_id=="70470"|site_id=="70481" 
+           ) %>% 
+  ggplot(aes(x = factor(year), y = log10(bd_load+1), fill=collect_siteid)) +
+  geom_boxplot(aes(group=factor(year))) +
+  #geom_point() +
+  labs(x = "Visit date", y = "bd_load") +
+  facet_grid(. ~ site_id * collect_siteid ) +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  ggtitle("A")  
+
+boxplot_bd_by_source_SEKI <- cmr_captures_Bdloads_frogsource %>% 
+  filter(is.na(collect_siteid)==F, 
+         is.na(pit_tag_ref)==F,
+         is.na(swab_id)==F, 
+         site_id=="10223"|site_id=="10225" ) %>% 
+  ggplot(aes(x = factor(year), y = log10(bd_load+1), fill=collect_siteid)) +
+  geom_boxplot(aes(group=year)) +
+  #geom_point() +
+  labs(x = "Visit date", y = "bd_load") +
+  facet_grid(. ~ site_id * collect_siteid ) +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  ggtitle("B")  
+### bonus: add respective source site Bd loads when available (Hermit may be only choice)
